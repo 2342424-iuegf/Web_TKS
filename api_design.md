@@ -322,6 +322,65 @@
 
 ## 5. 数据模型定义
 
+### 5.1 摄像头表 (p_camera)
+| 字段名 | 字段类型 | 是否允许为空 | 默认值 | 字段注释 |
+| :--- | :--- | :--- | :--- | :--- |
+| camera_id | varchar(20) | NO | (Null) | 摄像头编号 |
+| camera_name | varchar(50) | YES | (Null) | 摄像头名称 |
+| rstp | varchar(100) | YES | (Null) | rstp地址 |
+| is_selected | tinyint(1) | NO | (Null) | 是否检测 |
+| is_entry | smallint | YES | (Null) | 是否入口摄像头 |
+| detect_vehicle | tinyint(1) | NO | (Null) | 场景是否有车辆:1.有车,2.无车,3.移动 |
+| detect_leave | tinyint(1) | NO | (Null) | 是否检测脱岗 |
+| detect_sleep | tinyint(1) | NO | (Null) | 是否检测睡岗 |
+| dept | varchar(50) | NO | (Null) | 所在部门 |
+| clarity | tinyint | YES | (Null) | 图像清晰度 1: 很清晰; 0: 清晰; -1: 不清晰 |
+| remarks | varchar(100) | YES | (Null) | 说明 |
+
+### 5.2 模型表 (p_model)
+| 字段名 | 字段类型 | 是否允许为空 | 默认值 | 字段注释 |
+| :--- | :--- | :--- | :--- | :--- |
+| model_name | varchar(50) | NO | (Null) | 模型名称 |
+| model_path | varchar(100) | YES | (Null) | 模型路径 |
+| modify_date | datetime | YES | (Null) | 修改时间 |
+| description | varchar(100) | YES | (Null) | 描述 |
+
+### 5.3 检测区域表 (p_detection_area)
+| 字段名 | 字段类型 | 是否允许为空 | 默认值 | 字段注释 |
+| :--- | :--- | :--- | :--- | :--- |
+| camera_id | varchar(20) | NO | (Null) | 摄像头编号 |
+| area_no | smallint | NO | (Null) | 区域编号 |
+| area_kind | smallint | NO | (Null) | 区域类型: 1-脱岗区域, 2-换车区域, 3-危险区域 |
+| machine_id | varchar(20) | NO | (Null) | 机台编号 |
+| json | text | YES | (Null) | 区域坐标JSON |
+| remarks | varchar(100) | YES | (Null) | 说明 |
+
+### 5.4 事件表 (event)
+| 字段名 | 字段类型 | 是否允许为空 | 默认值 | 字段注释 |
+| :--- | :--- | :--- | :--- | :--- |
+| event_id | varchar(20) | NO | (Null) | 事件ID |
+| camera_id | varchar(20) | NO | (Null) | 摄像头ID |
+| event_type | smallint | NO | (Null) | 事件类型 |
+| event_title | varchar(100) | YES | (Null) | 事件标题 |
+| event_desc | text | YES | (Null) | 事件描述 |
+| event_time | datetime | NO | (Null) | 事件发生时间 |
+| area_no | smallint | YES | (Null) | 区域编号 |
+| machine_id | varchar(20) | YES | (Null) | 机台编号 |
+| status | smallint | NO | 0 | 状态: 0-未处理, 1-已处理 |
+| process_time | datetime | YES | (Null) | 处理时间 |
+| process_user | varchar(20) | YES | (Null) | 处理人 |
+| vehicle_id | varchar(20) | YES | (Null) | 车辆ID |
+
+### 5.5 系统参数表 (s_sys_params)
+| 字段名 | 字段类型 | 是否允许为空 | 默认值 | 字段注释 |
+| :--- | :--- | :--- | :--- | :--- |
+| param_id | int | NO | (Null) | 参数ID |
+| param_key | varchar(50) | NO | (Null) | 参数键 |
+| param_value | varchar(255) | YES | (Null) | 参数值 |
+| param_desc | varchar(100) | YES | (Null) | 参数描述 |
+| create_time | datetime | NO | CURRENT_TIMESTAMP | 创建时间 |
+| update_time | datetime | NO | CURRENT_TIMESTAMP | 更新时间 |
+
 ## 6. 接口安全
 
 ## 7. 接口性能考虑

@@ -5,7 +5,6 @@ email-validator>=2.1.0
 
 # Database
 sqlalchemy[asyncio]>=2.0.0
-alembic>=1.13.0
 asyncmy>=0.2.9   # MySQL async driver
 redis>=5.0.0     # cache
 
