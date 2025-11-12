@@ -26,24 +26,45 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
-    def assemble_cors_origins(cls, v: str | List[str]) -> List[str] | str:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, list | str):
+    @classmethod
+    def assemble_cors_origins(cls, v: str | List[str] | None) -> List[str]:
+        if v is None or v == "":
+            return []
+        if isinstance(v, str):
+            # 处理空字符串
+            if not v.strip():
+                return []
+            # 处理 JSON 格式的字符串
+            if v.strip().startswith("["):
+                import json
+                try:
+                    return json.loads(v)
+                except json.JSONDecodeError:
+                    pass
+            # 处理逗号分隔的字符串
+            return [i.strip() for i in v.split(",") if i.strip()]
+        if isinstance(v, list):
             return v
-        raise ValueError(v)
+        return []
 
-    # 数据库配置
-    POSTGRES_SERVER: str = "localhost"
-    POSTGRES_PORT: str = "5432"
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "postgres"
-    POSTGRES_DB: str = "app"
+    # 数据库配置 (支持MySQL和PostgreSQL)
+    DB_TYPE: str = "mysql"  # mysql 或 postgresql
+    DB_SERVER: str = "localhost"
+    DB_PORT: str = "3306"
+    DB_USER: str = "root"
+    DB_PASSWORD: str = "password"
+    DB_NAME: str = "vis_vehicle"
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
-        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@" \
-            f"{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        """根据DB_TYPE返回对应的数据库连接URI"""
+        if self.DB_TYPE.lower() == "mysql":
+            return f"mysql+asyncmy://{self.DB_USER}:{self.DB_PASSWORD}@" \
+                f"{self.DB_SERVER}:{self.DB_PORT}/{self.DB_NAME}"
+        else:
+            # PostgreSQL
+            return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@" \
+                f"{self.DB_SERVER}:{self.DB_PORT}/{self.DB_NAME}"
 
     # Redis配置
     REDIS_HOST: str = "localhost"

@@ -94,28 +94,10 @@ cp .env.example .env
 # 编辑.env文件配置数据库等信息
 ```
 
-5. 运行迁移
+5. 启动项目
 ```bash
-# 首次初始化
-alembic init alembic  # 创建 alembic 配置
-
-# 后续迁移可以使用便捷脚本
-# Linux/Mac
-./scripts/alembic_upgrade.sh "迁移说明"    # 例如: ./scripts/alembic_upgrade.sh "add user table"
-
-# Windows
-scripts\alembic_upgrade.bat "迁移说明"     # 例如: scripts\alembic_upgrade.bat "add user table"
+python main.py
 ```
-
-迁移脚本会自动：
-- 生成迁移文件
-- 执行迁移操作
-- 更新数据库到最新状态
-
-> 注意：首次使用时需要给 shell 脚本添加执行权限：
-> ```bash
-> chmod +x scripts/alembic_upgrade.sh
-> ```
 
 访问:
 - Swagger文档: http://localhost:8000/docs
@@ -150,8 +132,6 @@ app/
 ├── tests/               # 测试用例
 ├── __init__.py          # 包初始化文件
 ├── scripts/              # 实用脚本
-│   ├── alembic_upgrade.sh    # 数据库迁移(Unix)
-│   └── alembic_upgrade.bat   # 数据库迁移(Windows)
 ```
 
 ```python
