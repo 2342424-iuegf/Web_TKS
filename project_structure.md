@@ -13,7 +13,6 @@ Web_TKS/
 │   ├── .gitignore               # Git忽略文件配置
 │   ├── LICENSE                  # 许可证文件
 │   ├── README.md                # 项目说明文档
-│   ├── alembic.ini              # Alembic配置文件（新建）
 │   ├── app/                     # 应用主目录
 │   │   ├── __init__.py          # 应用初始化文件
 │   │   ├── api/                 # API接口层
@@ -103,15 +102,9 @@ Web_TKS/
 │   │       ├── file.py          # 文件处理工具（新建）
 │   │       ├── image.py         # 图像处理工具（新建）
 │   │       └── mqtt_client.py   # MQTT客户端工具（新建）
-│   ├── alembic/                 # 数据库迁移脚本目录（新建）
-│   │   ├── env.py               # Alembic环境配置（新建）
-│   │   ├── script.py.mako       # 迁移脚本模板（新建）
-│   │   └── versions/            # 迁移版本目录（新建）
 │   ├── main.py                  # 应用入口文件，初始化FastAPI应用
 │   ├── requirements.txt         # Python依赖包列表
 │   └── scripts/                 # 脚本目录
-│       ├── alembic_upgrade.bat  # Windows环境数据库迁移脚本
-│       ├── alembic_upgrade.sh   # Linux/Mac环境数据库迁移脚本
 │       └── start_app.sh         # 应用启动脚本（新建）
 ├── front/                       # 前端Vue 3应用
 │   ├── public/                  # 静态资源文件
@@ -225,7 +218,6 @@ Web_TKS/
 | backend/LICENSE | 许可证文件 |
 | backend/README.md | 项目说明文档 |
 | backend/.cursorrules | Cursor编辑器规则配置 |
-| backend/alembic.ini | Alembic配置文件（新建） |
 | backend/app/__init__.py | 应用初始化文件 |
 | backend/app/api/__init__.py | API包初始化 |
 | backend/app/api/deps.py | API依赖注入定义 |
@@ -302,11 +294,6 @@ Web_TKS/
 | backend/app/utils/file.py | 文件处理工具（新建） |
 | backend/app/utils/image.py | 图像处理工具（新建） |
 | backend/app/utils/mqtt_client.py | MQTT客户端工具（新建） |
-| backend/alembic/env.py | Alembic环境配置（新建） |
-| backend/alembic/script.py.mako | 迁移脚本模板（新建） |
-| backend/alembic/versions/ | 迁移版本目录（新建） |
-| backend/scripts/alembic_upgrade.bat | Windows环境数据库迁移脚本 |
-| backend/scripts/alembic_upgrade.sh | Linux/Mac环境数据库迁移脚本 |
 | backend/scripts/start_app.sh | 应用启动脚本（新建） |
 | front/public/favicon.ico | 网站图标 |
 | front/public/index.html | HTML模板文件 |
@@ -408,7 +395,6 @@ Web_TKS/
 - **视频播放**: video.js
 
 ### 集成工具
-- **数据库迁移**: Alembic
 - **容器化**: Docker & Docker Compose
 - **CI/CD**: GitHub Actions
 - **MQTT Broker**: EMQX/HiveMQ (用于与MES系统集成)
