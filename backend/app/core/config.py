@@ -26,26 +26,12 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
     
     @field_validator("BACKEND_CORS_ORIGINS", mode="before")
-    @classmethod
-    def assemble_cors_origins(cls, v: str | List[str] | None) -> List[str]:
-        if v is None or v == "":
-            return []
-        if isinstance(v, str):
-            # 处理空字符串
-            if not v.strip():
-                return []
-            # 处理 JSON 格式的字符串
-            if v.strip().startswith("["):
-                import json
-                try:
-                    return json.loads(v)
-                except json.JSONDecodeError:
-                    pass
-            # 处理逗号分隔的字符串
-            return [i.strip() for i in v.split(",") if i.strip()]
-        if isinstance(v, list):
+    def assemble_cors_origins(cls, v: str | List[str]) -> List[str] | str:
+        if isinstance(v, str) and not v.startswith("["):
+            return [i.strip() for i in v.split(",")]
+        elif isinstance(v, list | str):
             return v
-        return []
+        raise ValueError(v)
 
     # 数据库配置 (支持MySQL和PostgreSQL)
     DB_TYPE: str = "mysql"  # mysql 或 postgresql

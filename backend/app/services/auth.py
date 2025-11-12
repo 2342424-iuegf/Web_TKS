@@ -16,14 +16,21 @@ class AuthService:
     
     @staticmethod
     async def authenticate(
-        email: str, 
+        username: str, 
         password: str, 
         db: AsyncSession
     ) -> Optional[User]:
-        """验证用户"""
-        query = select(User).where(User.email == email)
+        """验证用户（支持username或email登录）"""
+        # 先尝试用username查找
+        query = select(User).where(User.username == username)
         result = await db.execute(query)
         user = result.scalar_one_or_none()
+        
+        # 如果username没找到，尝试用email查找
+        if not user:
+            query = select(User).where(User.email == username)
+            result = await db.execute(query)
+            user = result.scalar_one_or_none()
         
         if not user:
             return None
