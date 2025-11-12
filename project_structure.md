@@ -113,7 +113,7 @@ Web_TKS/
 │       ├── alembic_upgrade.bat  # Windows环境数据库迁移脚本
 │       ├── alembic_upgrade.sh   # Linux/Mac环境数据库迁移脚本
 │       └── start_app.sh         # 应用启动脚本（新建）
-├── front/                       # 前端React应用
+├── front/                       # 前端Vue 3应用
 │   ├── public/                  # 静态资源文件
 │   │   ├── favicon.ico          # 网站图标
 │   │   └── index.html           # HTML模板
@@ -128,56 +128,56 @@ Web_TKS/
 │   │   ├── assets/              # 图片、图标等资源
 │   │   ├── components/          # 通用组件
 │   │   │   ├── common/          # 基础通用组件
-│   │   │   │   ├── Button.tsx   # 自定义按钮组件
-│   │   │   │   ├── Table.tsx    # 自定义表格组件
-│   │   │   │   ├── Modal.tsx    # 自定义模态框组件
-│   │   │   │   └── Form.tsx     # 自定义表单组件
+│   │   │   │   ├── Button.vue   # 自定义按钮组件
+│   │   │   │   ├── Table.vue    # 自定义表格组件
+│   │   │   │   ├── Modal.vue    # 自定义模态框组件
+│   │   │   │   └── Form.vue     # 自定义表单组件
 │   │   │   ├── layout/          # 布局组件
-│   │   │   │   ├── Header.tsx   # 顶部导航组件
-│   │   │   │   ├── Sider.tsx    # 侧边栏组件
-│   │   │   │   └── Main.tsx     # 主内容区域组件
+│   │   │   │   ├── Header.vue   # 顶部导航组件
+│   │   │   │   ├── Sider.vue    # 侧边栏组件
+│   │   │   │   └── Main.vue     # 主内容区域组件
 │   │   │   └── visualization/   # 可视化组件
-│   │   │       ├── Map.tsx      # 地图可视化组件
-│   │   │       ├── VideoPlayer.tsx # 视频播放器组件
-│   │   │       └── Chart.tsx    # 图表组件
-│   │   ├── hooks/               # 自定义React钩子
-│   │   │   ├── useAuth.ts       # 认证相关钩子
-│   │   │   ├── useWebSocket.ts  # WebSocket连接钩子
-│   │   │   └── usePermission.ts # 权限检查钩子
+│   │   │       ├── Map.vue      # 地图可视化组件
+│   │   │       ├── VideoPlayer.vue # 视频播放器组件
+│   │   │       └── Chart.vue    # 图表组件
+│   │   ├── composables/         # 自定义Vue组合式函数
+│   │   │   ├── useAuth.ts       # 认证相关组合式函数
+│   │   │   ├── useWebSocket.ts  # WebSocket连接组合式函数
+│   │   │   └── usePermission.ts # 权限检查组合式函数
 │   │   ├── layouts/             # 页面布局
-│   │   │   ├── BasicLayout.tsx  # 基础布局
-│   │   │   └── LoginLayout.tsx  # 登录页面布局
+│   │   │   ├── BasicLayout.vue  # 基础布局
+│   │   │   └── LoginLayout.vue  # 登录页面布局
 │   │   ├── locales/             # 国际化配置
-│   │   ├── pages/               # 页面组件
+│   │   ├── views/               # 页面组件
 │   │   │   ├── login/           # 登录页面
 │   │   │   ├── system/          # 系统管理模块
-│   │   │   │   ├── UserManagement.tsx # 用户管理页面
-│   │   │   │   ├── RoleManagement.tsx # 权限管理页面
-│   │   │   │   ├── ParameterSetting.tsx # 参数设置页面
-│   │   │   │   ├── CameraManagement.tsx # 摄像头管理页面
-│   │   │   │   └── EventPushSetting.tsx # 事件推送设置页面
+│   │   │   │   ├── UserManagement.vue # 用户管理页面
+│   │   │   │   ├── RoleManagement.vue # 权限管理页面
+│   │   │   │   ├── ParameterSetting.vue # 参数设置页面
+│   │   │   │   ├── CameraManagement.vue # 摄像头管理页面
+│   │   │   │   └── EventPushSetting.vue # 事件推送设置页面
 │   │   │   ├── detection/       # 检测区域设置模块
-│   │   │   │   ├── CarExchangeArea.tsx # 机台-换车区域设置页面
-│   │   │   │   ├── OffDutyArea.tsx # 机台-脱岗区域设置页面
-│   │   │   │   └── DangerArea.tsx # 危险区域设置页面
+│   │   │   │   ├── CarExchangeArea.vue # 机台-换车区域设置页面
+│   │   │   │   ├── OffDutyArea.vue # 机台-脱岗区域设置页面
+│   │   │   │   └── DangerArea.vue # 危险区域设置页面
 │   │   │   ├── model/           # 模型管理模块
-│   │   │   │   └── ModelManagement.tsx # 布车、脱岗等模型文件管理页面
+│   │   │   │   └── ModelManagement.vue # 布车、脱岗等模型文件管理页面
 │   │   │   ├── clothCar/        # 布车分布检测模块
-│   │   │   │   ├── ClothCarMonitoring.tsx # 布车分布监测页面
-│   │   │   │   └── ClothCarSearch.tsx # 布车搜索定位页面
+│   │   │   │   ├── ClothCarMonitoring.vue # 布车分布监测页面
+│   │   │   │   └── ClothCarSearch.vue # 布车搜索定位页面
 │   │   │   ├── channel/         # 通道出入检测模块
-│   │   │   │   └── ChannelDetection.tsx # 通道布车出入监测页面
+│   │   │   │   └── ChannelDetection.vue # 通道布车出入监测页面
 │   │   │   ├── clothChange/     # 落布换车检测模块
-│   │   │   │   └── ClothChangeDetection.tsx # 落布换车检测页面
+│   │   │   │   └── ClothChangeDetection.vue # 落布换车检测页面
 │   │   │   ├── offDuty/         # 脱岗检测模块
-│   │   │   │   └── OffDutyDetection.tsx # 脱岗检测页面
+│   │   │   │   └── OffDutyDetection.vue # 脱岗检测页面
 │   │   │   ├── danger/          # 危险检测模块
-│   │   │   │   └── DangerDetection.tsx # 危险区域检测页面
+│   │   │   │   └── DangerDetection.vue # 危险区域检测页面
 │   │   │   ├── event/           # 事件查询模块
-│   │   │   │   └── EventQuery.tsx # 事件查询页面
+│   │   │   │   └── EventQuery.vue # 事件查询页面
 │   │   │   └── video/           # 视频查询模块
-│   │   │       ├── LiveVideo.tsx # 实时视频页面
-│   │   │       └── VideoPlayback.tsx # 视频回放页面
+│   │   │       ├── LiveVideo.vue # 实时视频页面
+│   │   │       └── VideoPlayback.vue # 视频回放页面
 │   │   ├── services/            # 业务逻辑服务
 │   │   │   ├── authService.ts   # 认证服务
 │   │   │   ├── systemService.ts # 系统管理服务
@@ -185,11 +185,10 @@ Web_TKS/
 │   │   │   └── mqttService.ts   # MQTT通信服务
 │   │   ├── store/               # 状态管理
 │   │   │   ├── index.ts         # Store入口
-│   │   │   ├── slices/          # Redux切片
-│   │   │   │   ├── authSlice.ts # 认证状态
-│   │   │   │   ├── systemSlice.ts # 系统设置状态
-│   │   │   │   └── detectionSlice.ts # 检测数据状态
-│   │   │   └── hooks.ts         # Redux Hooks
+│   │   │   ├── modules/         # Pinia模块
+│   │   │   │   ├── auth.ts      # 认证状态
+│   │   │   │   ├── system.ts    # 系统设置状态
+│   │   │   │   └── detection.ts # 检测数据状态
 │   │   ├── styles/              # 全局样式
 │   │   │   ├── theme.ts         # 主题配置
 │   │   │   ├── global.less      # 全局样式文件
@@ -202,9 +201,11 @@ Web_TKS/
 │   │   │   ├── request.ts       # API请求封装
 │   │   │   ├── storage.ts       # 本地存储封装
 │   │   │   └── date.ts          # 日期处理工具
-│   │   ├── App.tsx              # 应用根组件
-│   │   ├── main.tsx             # 应用入口文件
-│   │   └── routes.tsx           # 路由配置
+│   │   ├── router/              # 路由配置
+│   │   │   ├── index.ts         # 路由主配置
+│   │   │   └── guards.ts        # 路由守卫
+│   │   ├── App.vue              # 应用根组件
+│   │   └── main.ts              # 应用入口文件
 │   ├── .eslintrc.js             # ESLint配置
 │   ├── .prettierrc              # Prettier配置
 │   ├── tsconfig.json            # TypeScript配置
@@ -395,13 +396,13 @@ Web_TKS/
 - **任务队列**: Celery (用于异步任务处理)
 
 ### 前端技术栈
-- **框架**: React 18
+- **框架**: Vue 3
 - **类型系统**: TypeScript 5
-- **状态管理**: Redux Toolkit
-- **路由**: React Router 6
-- **UI组件库**: Ant Design
+- **状态管理**: Pinia
+- **路由**: Vue Router 4
+- **UI组件库**: Ant Design Vue
 - **HTTP客户端**: Axios
-- **样式方案**: Styled Components
+- **样式方案**: CSS Modules / SCSS
 - **构建工具**: Vite
 - **实时通信**: Socket.IO Client
 - **视频播放**: video.js
