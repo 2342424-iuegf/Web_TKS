@@ -129,7 +129,7 @@ const activePath = computed(() => route.path)
 :deep(.el-menu-item:hover),
 :deep(.el-sub-menu__title:hover) {
   background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: #1890ff;
 }
 
 :deep(.el-menu-item.is-active) {
@@ -142,7 +142,7 @@ const activePath = computed(() => route.path)
 }
 
 :deep(.el-sub-menu__title:hover .el-icon) {
-  color: #fff;
+  color: #1890ff;
 }
 
 :deep(.el-menu--vertical .el-menu .el-menu-item) {
@@ -151,5 +151,6 @@ const activePath = computed(() => route.path)
 
 :deep(.el-menu--vertical .el-menu .el-menu-item:hover) {
   background-color: rgba(255, 255, 255, 0.1);
+  color: #1890ff;
 }
 </style>
