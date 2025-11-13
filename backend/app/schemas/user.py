@@ -1,14 +1,22 @@
 # schemas/user.py
-from typing import Optional
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from typing import Optional, Union
+from pydantic import BaseModel, EmailStr, Field, ConfigDict, field_validator
 from datetime import datetime
 
 class UserBase(BaseModel):
     """用户基础模型"""
-    email: Optional[EmailStr] = Field(None, description="电子邮件")
+    email: Optional[Union[EmailStr, str]] = Field(None, description="电子邮件")
     username: str = Field(..., min_length=3, max_length=50, description="用户名")
     role: str = Field(..., min_length=3, max_length=20, description="用户角色")
     status: int = Field(1, description="用户状态")  # 1-启用, 0-禁用
+    
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v):
+        """验证邮箱，空字符串转换为None"""
+        if v == "" or v is None:
+            return None
+        return v
     
     model_config = ConfigDict(
         from_attributes=True,
@@ -28,11 +36,19 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     """更新用户模型"""
-    email: Optional[EmailStr] = None
+    email: Optional[Union[EmailStr, str]] = None
     username: Optional[str] = Field(None, min_length=3, max_length=50)
     password: Optional[str] = Field(None, min_length=8, max_length=100)
     role: Optional[str] = Field(None, min_length=3, max_length=20)
     status: Optional[int] = None
+    
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v):
+        """验证邮箱，空字符串转换为None"""
+        if v == "" or v is None:
+            return None
+        return v
     
     model_config = ConfigDict(from_attributes=True)
 
@@ -52,3 +68,9 @@ class UserResponse(UserBase):
         json_encoders = {
             datetime: lambda v: v.strftime("%Y-%m-%d %H:%M:%S")
         }
+
+class UserStatusUpdate(BaseModel):
+    """用户状态更新模型"""
+    status: int = Field(..., ge=0, le=1, description="用户状态：0-禁用，1-启用")
+    
+    model_config = ConfigDict(from_attributes=True)

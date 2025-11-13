@@ -292,7 +292,7 @@ export const getUserList = (params?: any) => userApi.getList(params)
 export const createUser = (data: any) => userApi.create(data)
 export const updateUser = (id: string, data: any) => userApi.update(id, data)
 export const deleteUser = (id: string) => userApi.delete(id)
-export const updateUserStatus = (id: string, status: string) => request.put(`/system/users/${id}/status`, { status })
+export const updateUserStatus = (id: number | string, status: number) => request.put(`/system/users/${id}/status`, { status })
 
 // 角色管理函数别名
 export const getRoleList = () => roleApi.getList()

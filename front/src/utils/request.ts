@@ -83,6 +83,21 @@ service.interceptors.response.use(
         return Promise.reject(error)
       }
       
+      // 422 验证错误
+      if (status === 422) {
+        // FastAPI 验证错误格式
+        if (Array.isArray(data?.detail)) {
+          const errorMsg = data.detail.map((err: any) => {
+            const field = err.loc?.slice(1).join('.') || '未知字段'
+            return `${field}: ${err.msg}`
+          }).join('; ')
+          ElMessage.error(`数据验证失败: ${errorMsg}`)
+        } else {
+          ElMessage.error(data?.detail || data?.message || '数据验证失败')
+        }
+        return Promise.reject(error)
+      }
+      
       // 其他错误
       const errorMessage = data?.detail || data?.message || error.message || '请求失败'
       ElMessage.error(errorMessage)

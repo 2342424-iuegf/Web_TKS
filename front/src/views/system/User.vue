@@ -272,15 +272,51 @@ async function handleSubmit() {
   try {
     await formRef.value.validate()
     if (isEdit.value) {
-      await updateUser(formData)
+      // 编辑时，排除密码字段（如果为空）和id字段
+      const updateData: any = {
+        role: formData.role,
+        status: formData.status
+      }
+      // 只有当邮箱不为空时才发送
+      if (formData.email && formData.email.trim()) {
+        updateData.email = formData.email.trim()
+      }
+      // 如果密码不为空，则更新密码
+      if (formData.password && formData.password.trim()) {
+        updateData.password = formData.password.trim()
+      }
+      await updateUser(formData.id.toString(), updateData)
     } else {
-      await createUser(formData)
+      // 创建时，只发送必要的字段，排除id
+      const createData: any = {
+        username: formData.username,
+        password: formData.password,
+        role: formData.role,
+        status: formData.status
+      }
+      // 只有当邮箱不为空时才发送
+      if (formData.email && formData.email.trim()) {
+        createData.email = formData.email.trim()
+      }
+      await createUser(createData)
     }
     ElMessage.success(isEdit.value ? '更新成功' : '创建成功')
     dialogVisible.value = false
     loadUserList()
-  } catch (error) {
+  } catch (error: any) {
     console.error('提交失败:', error)
+    // 显示详细的错误信息
+    if (error?.response?.data?.detail) {
+      if (Array.isArray(error.response.data.detail)) {
+        // FastAPI 验证错误格式
+        const errorMsg = error.response.data.detail.map((err: any) => {
+          return `${err.loc?.join('.')}: ${err.msg}`
+        }).join('; ')
+        ElMessage.error(errorMsg)
+      } else {
+        ElMessage.error(error.response.data.detail)
+      }
+    }
   }
 }
 
