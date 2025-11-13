@@ -35,7 +35,7 @@
         <ElTableColumn prop="id" label="模型ID" width="80" />
         <ElTableColumn prop="modelName" label="模型名称" />
         <ElTableColumn prop="modelType" label="模型类型" width="120">
-          >template #default="scope">
+          <template #default="scope">
             <ElTag
               v-if="scope.row.modelType === 1"
               type="primary"
@@ -52,39 +52,39 @@
               v-else-if="scope.row.modelType === 4"
               type="info"
             >其他模型</ElTag>
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn prop="version" label="版本号" width="100" />
         <ElTableColumn prop="accuracy" label="准确率" width="100">
-          >template #default="scope">
+          <template #default="scope">
             {{ (scope.row.accuracy || 0) * 100 }}%
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn prop="fileSize" label="文件大小" width="120">
-          >template #default="scope">
+          <template #default="scope">
             {{ formatFileSize(scope.row.fileSize || 0) }}
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn prop="createTime" label="上传时间" width="180">
-          >template #default="scope">
+          <template #default="scope">
             {{ formatDate(scope.row.createTime) }}
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn prop="status" label="状态" width="100">
-          >template #default="scope">
+          <template #default="scope">
             <ElTag :type="scope.row.status === 1 ? 'success' : 'danger'">
               {{ scope.row.status === 1 ? '启用' : '禁用' }}
             </ElTag>
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn label="操作" width="200" fixed="right">
-          >template #default="scope">
-            <ElButton type="primary" text @click="handleDetail(scope.row)">详情>/ElButton>
+          <template #default="scope">
+            <ElButton type="primary" text @click="handleDetail(scope.row)">详情</ElButton>
             <ElButton type="warning" text @click="handleToggleStatus(scope.row)">
               {{ scope.row.status === 1 ? '禁用' : '启用' }}
             </ElButton>
             <ElButton type="danger" text @click="handleDelete(scope.row)">删除</ElButton>
-          >template>
+          </template>
         </ElTableColumn>
       </ElTable>
       <div class="pagination">
@@ -131,9 +131,7 @@
         <ElFormItem label="版本号" prop="version">
           <ElInput v-model="uploadFormData.version" placeholder="请输入版本号，如 v1.0.0" />
         </ElFormItem>
-        <ElFormItem label="模型文件" prop="file"
-          v-if="!uploading"
-        >
+        <ElFormItem label="模型文件" prop="file" v-if="!uploading">
           <ElUpload
             ref="uploadRef"
             drag
@@ -165,16 +163,14 @@
           <p class="uploading-text">正在上传文件...</p>
         </ElFormItem>
       </ElForm>
-      >template #footer>
-        <ElButton @click="uploadDialogVisible = false"
-          :disabled="uploading"
-        >取消</ElButton>
+      <template #footer>
+        <ElButton @click="uploadDialogVisible = false" :disabled="uploading">取消</ElButton>
         <ElButton
           type="primary"
           @click="handleUploadSubmit"
           :disabled="uploading || fileList.length === 0"
         >上传</ElButton>
-      >template>
+      </template>
     </ElDialog>
 
     <!-- 模型详情对话框 -->
@@ -221,34 +217,28 @@
           <ElDescriptionsItem label="描述">{{ currentModel.description || '-' }}</ElDescriptionsItem>
         </ElDescriptions>
 
-        <div class="performance-charts"
-          v-if="performanceData.length > 0"
-        >
+        <div class="performance-charts" v-if="performanceData.length > 0">
           <h3 class="chart-title">性能指标趋势图</h3>
           <ElCard>
-            <!- 这里应该是性能指标图表 -!>
-            <div class="chart-placeholder">性能指标可视化图表区域
-              
-            </div>
+            <!-- 这里应该是性能指标图表 -->
+            <div class="chart-placeholder">性能指标可视化图表区域</div>
           </ElCard>
-        </div
-          v-else
-        >
+        </div>
+        <div v-else>
           <ElEmpty description="暂无性能数据" />
-        </div
-        >
-      </div
-        v-else
-      >
+        </div>
+      </div>
+      <div v-else>
         <ElEmpty description="暂无模型数据" />
-      </div
-      >
-      >template #footer>
+      </div>
+      <template #footer>
         <ElButton @click="detailDialogVisible = false">关闭</ElButton>
-        <ElButton type="primary" @click="handleDownloadModel"
+        <ElButton
+          type="primary"
+          @click="handleDownloadModel"
           v-if="currentModel"
         >下载模型</ElButton>
-      >template>
+      </template>
     </ElDialog>
   </div>
 </template>

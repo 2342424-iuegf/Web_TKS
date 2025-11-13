@@ -27,20 +27,20 @@
         <ElTableColumn prop="areaName" label="区域名称" />
         <ElTableColumn prop="description" label="区域描述" />
         <ElTableColumn prop="status" label="状态" width="100">
-          >template #default="scope">
+          <template #default="scope">
             <ElTag :type="scope.row.status === 1 ? 'success' : 'danger'">
               {{ scope.row.status === 1 ? '启用' : '禁用' }}
             </ElTag>
-          >template>
+          </template>
         </ElTableColumn>
         <ElTableColumn label="操作" width="200" fixed="right">
-          >template #default="scope">
+          <template #default="scope">
             <ElButton type="primary" text @click="handleEdit(scope.row)">编辑</ElButton>
             <ElButton type="warning" text @click="handleToggleStatus(scope.row)">
               {{ scope.row.status === 1 ? '禁用' : '启用' }}
             </ElButton>
             <ElButton type="danger" text @click="handleDelete(scope.row)">删除</ElButton>
-          >template>
+          </template>
         </ElTableColumn>
       </ElTable>
       <div class="pagination">
@@ -62,7 +62,7 @@
       width="800px"
       @close="handleDialogClose"
     >
-      <div class="dialog-content"
+      <div class="dialog-content">
         <ElForm
           ref="formRef"
           :model="formData"
@@ -107,37 +107,27 @@
             />
             <span class="param-value">{{ formData.sensitivity }}/10</span>
           </ElFormItem>
-        </ElForm
-        <div class="preview-container"
-          v-if="formData.cameraId"
-        >
+        </ElForm>
+        <div class="preview-container" v-if="formData.cameraId">
           <div class="preview-title">摄像头预览与区域绘制</div>
           <div class="video-preview">
             <!-- 这里应该放摄像头预览视频 -->
-            <div class="video-placeholder">摄像头预览区域
-              
-            </div>
+            <div class="video-placeholder">摄像头预览区域</div>
           </div>
           <div class="draw-controls">
             <ElButton type="primary" @click="startDrawing">开始绘制区域</ElButton>
             <ElButton @click="cancelDrawing">取消绘制</ElButton>
-            <ElButton type="success" @click="saveDrawing">保存区域
-              
-            </ElButton>
+            <ElButton type="success" @click="saveDrawing">保存区域</ElButton>
           </div>
-        </div
-          v-else
-        >
-          <div class="no-camera-tip">请先选择摄像头
-            
-          </div
-          >
-        </div
-      >
-      >template #footer>
+        </div>
+        <div v-else>
+          <div class="no-camera-tip">请先选择摄像头</div>
+        </div>
+      </div>
+      <template #footer>
         <ElButton @click="dialogVisible = false">取消</ElButton>
         <ElButton type="primary" @click="handleSubmit">确定</ElButton>
-      >template>
+      </template>
     </ElDialog>
   </div>
 </template>
