@@ -13,6 +13,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    host: true, // 监听在所有网络接口上，包括IPv4和IPv6
     proxy: {
       '/api': {
         target: 'http://localhost:9527',
