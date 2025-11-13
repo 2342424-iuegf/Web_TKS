@@ -20,6 +20,6 @@
 .content-wrapper {
   height: 100%;
   padding: 20px;
-  overflow-y: auto;
+  overflow: hidden;
 }
 </style>

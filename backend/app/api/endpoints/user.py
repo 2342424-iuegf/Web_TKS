@@ -73,9 +73,7 @@ async def get_users(
             "role": user.role,
             "roleName": "管理员" if user.role == "admin" else "普通用户",
             "status": user.status,
-            "createTime": user.created_at.strftime("%Y-%m-%d %H:%M:%S") if user.created_at else "",
-            "nickname": user.username,  # 如果没有nickname字段，使用username
-            "phone": ""  # 如果没有phone字段，返回空字符串
+            "createTime": user.created_at.strftime("%Y-%m-%d %H:%M:%S") if user.created_at else ""
         }
         for user in users
     ]

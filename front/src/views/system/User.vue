@@ -16,31 +16,31 @@
         <ElButton @click="handleReset">重置</ElButton>
         <ElButton type="success" @click="handleCreate">新增用户</ElButton>
       </div>
-      <ElTable :data="userList" style="width: 100%">
-        <ElTableColumn prop="id" label="用户ID" width="80" />
-        <ElTableColumn prop="username" label="用户名" />
-        <ElTableColumn prop="nickname" label="昵称" />
-        <ElTableColumn prop="email" label="邮箱" />
-        <ElTableColumn prop="phone" label="手机号" />
-        <ElTableColumn prop="roleName" label="角色" />
-        <ElTableColumn prop="status" label="状态" width="100">
-          >template #default="scope">
-            <ElSwitch
-              v-model="scope.row.status"
-              :active-value="1"
-              :inactive-value="0"
-              @change="handleStatusChange(scope.row)"
-            />
-          >template>
-        </ElTableColumn>
-        <ElTableColumn prop="createTime" label="创建时间" />
-        <ElTableColumn label="操作" width="150" fixed="right">
-          >template #default="scope">
-            <ElButton type="primary" text @click="handleEdit(scope.row)">编辑</ElButton>
-            <ElButton type="danger" text @click="handleDelete(scope.row)">删除</ElButton>
-          >template>
-        </ElTableColumn>
-      </ElTable>
+      <div class="table-wrapper">
+        <ElTable :data="userList" style="width: 100%">
+          <ElTableColumn prop="id" label="用户ID" width="80" />
+          <ElTableColumn prop="username" label="用户名" />
+          <ElTableColumn prop="email" label="邮箱" />
+          <ElTableColumn prop="roleName" label="角色" />
+          <ElTableColumn prop="status" label="状态" width="100">
+            <template #default="scope">
+              <ElSwitch
+                v-model="scope.row.status"
+                :active-value="1"
+                :inactive-value="0"
+                @change="handleStatusChange(scope.row)"
+              />
+            </template>
+          </ElTableColumn>
+          <ElTableColumn prop="createTime" label="创建时间" />
+          <ElTableColumn label="操作" width="150" fixed="right">
+            <template #default="scope">
+              <ElButton type="primary" text @click="handleEdit(scope.row)">编辑</ElButton>
+              <ElButton type="danger" text @click="handleDelete(scope.row)">删除</ElButton>
+            </template>
+          </ElTableColumn>
+        </ElTable>
+      </div>
       <div class="pagination">
         <ElPagination
           v-model:current-page="pagination.currentPage"
@@ -110,9 +110,7 @@ import { getUserList, createUser, updateUser, deleteUser, updateUserStatus } fro
 interface User {
   id: number
   username: string
-  nickname: string
   email: string
-  phone: string
   role: string
   roleName: string
   status: number
@@ -347,6 +345,7 @@ onMounted(() => {
 <style scoped>
 .user-management {
   height: 100%;
+  overflow: hidden;
 }
 
 .page-header {
@@ -363,6 +362,7 @@ onMounted(() => {
   height: calc(100% - 60px);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .search-bar {
@@ -370,15 +370,23 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .search-input {
   width: 200px;
 }
 
+.table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .pagination {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  flex-shrink: 0;
 }
 </style>
