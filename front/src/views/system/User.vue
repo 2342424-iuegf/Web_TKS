@@ -69,9 +69,6 @@
         <ElFormItem label="用户名" prop="username">
           <ElInput v-model="formData.username" placeholder="请输入用户名" :disabled="isEdit" />
         </ElFormItem>
-        <ElFormItem label="昵称" prop="nickname">
-          <ElInput v-model="formData.nickname" placeholder="请输入昵称" />
-        </ElFormItem>
         <ElFormItem label="密码" :required="!isEdit" prop="password">
           <ElInput
             v-model="formData.password"
@@ -84,27 +81,23 @@
         <ElFormItem label="邮箱" prop="email">
           <ElInput v-model="formData.email" placeholder="请输入邮箱" />
         </ElFormItem>
-        <ElFormItem label="手机号" prop="phone">
-          <ElInput v-model="formData.phone" placeholder="请输入手机号" />
+        <ElFormItem label="角色" prop="role">
+          <ElSelect v-model="formData.role" placeholder="请选择角色">
+            <ElOption label="管理员" value="admin" />
+            <ElOption label="普通用户" value="user" />
+          </ElSelect>
         </ElFormItem>
-        <ElFormItem label="角色" prop="roleId">
-          <ElSelect v-model="formData.roleId" placeholder="请选择角色"
-            filterable
-            @focus="loadRoles"
-          >
-            <ElOption
-              v-for="role in roleList"
-              :key="role.id"
-              :label="role.name"
-              :value="role.id"
-            />
+        <ElFormItem label="状态" prop="status">
+          <ElSelect v-model="formData.status" placeholder="请选择状态">
+            <ElOption label="启用" :value="1" />
+            <ElOption label="禁用" :value="0" />
           </ElSelect>
         </ElFormItem>
       </ElForm>
-      >template #footer>
+      <template #footer>
         <ElButton @click="dialogVisible = false">取消</ElButton>
         <ElButton type="primary" @click="handleSubmit">确定</ElButton>
-      >template>
+      </template>
     </ElDialog>
   </div>
 </template>
@@ -120,7 +113,7 @@ interface User {
   nickname: string
   email: string
   phone: string
-  roleId: number
+  role: string
   roleName: string
   status: number
   createTime: string
@@ -145,29 +138,32 @@ const dialogTitle = ref('新增用户')
 const formRef = ref()
 const isEdit = ref(false)
 const roleList = ref<Role[]>([])
-const formData = reactive({
-  id: 0,
-  username: '',
-  nickname: '',
-  password: '',
-  email: '',
-  phone: '',
-  roleId: 0
+const formData = reactive({ 
+  id: 0, 
+  username: '', 
+  password: '', 
+  email: '', 
+  role: 'user', 
+  status: 1 
 })
 
-const formRules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' }
+const formRules = { 
+  username: [ 
+    { required: true, message: '请输入用户名', trigger: 'blur' } 
+  ], 
+  password: [ 
+    { required: true, message: '请输入密码', trigger: 'blur' }, 
+    { min: 8, message: '密码长度不能少于8位', trigger: 'blur' } 
+  ], 
+  email: [ 
+    { required: false, message: '请输入邮箱', trigger: 'blur' }, 
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur' } 
   ],
-  nickname: [
-    { required: true, message: '请输入昵称', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
-  ],
-  roleId: [
+  role: [
     { required: true, message: '请选择角色', trigger: 'change' }
+  ],
+  status: [
+    { required: true, message: '请选择状态', trigger: 'change' }
   ]
 }
 
@@ -224,10 +220,9 @@ function handleEdit(row: User) {
   isEdit.value = true
   formData.id = row.id
   formData.username = row.username
-  formData.nickname = row.nickname
   formData.email = row.email
-  formData.phone = row.phone
-  formData.roleId = row.roleId
+  formData.role = row.role
+  formData.status = row.status
   dialogVisible.value = true
 }
 
@@ -301,11 +296,10 @@ function resetFormData() {
   }
   formData.id = 0
   formData.username = ''
-  formData.nickname = ''
   formData.password = ''
   formData.email = ''
-  formData.phone = ''
-  formData.roleId = 0
+  formData.role = 'user'
+  formData.status = 1
 }
 
 // 初始化

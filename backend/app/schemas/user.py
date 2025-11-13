@@ -7,8 +7,8 @@ class UserBase(BaseModel):
     """用户基础模型"""
     email: Optional[EmailStr] = Field(None, description="电子邮件")
     username: str = Field(..., min_length=3, max_length=50, description="用户名")
-    is_active: bool = Field(True, description="是否激活")
-    is_superuser: bool = Field(False, description="是否是超级用户")
+    role: str = Field(..., min_length=3, max_length=20, description="用户角色")
+    status: int = Field(1, description="用户状态")  # 1-启用, 0-禁用
     
     model_config = ConfigDict(
         from_attributes=True,
@@ -31,7 +31,8 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     username: Optional[str] = Field(None, min_length=3, max_length=50)
     password: Optional[str] = Field(None, min_length=8, max_length=100)
-    is_active: Optional[bool] = None
+    role: Optional[str] = Field(None, min_length=3, max_length=20)
+    status: Optional[int] = None
     
     model_config = ConfigDict(from_attributes=True)
 

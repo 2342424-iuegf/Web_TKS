@@ -123,8 +123,8 @@ class AuthService:
             email=user_create.email,
             username=user_create.username,
             password_hash=get_password_hash(user_create.password),
-            status=1 if user_create.is_active else 0,
-            role="admin" if user_create.is_superuser else "user"
+            status=user_create.status,
+            role=user_create.role
         )
         db.add(db_user)
         await db.commit()
@@ -152,10 +152,10 @@ class AuthService:
             user.email = update_data.pop("email")
         if "username" in update_data:
             user.username = update_data.pop("username")
-        if "is_active" in update_data:
-            user.status = 1 if update_data.pop("is_active") else 0
-        if "is_superuser" in update_data:
-            user.role = "admin" if update_data.pop("is_superuser") else "user"
+        if "role" in update_data:
+            user.role = update_data.pop("role")
+        if "status" in update_data:
+            user.status = update_data.pop("status")
             
         await db.commit()
         await db.refresh(user)
