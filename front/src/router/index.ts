@@ -54,13 +54,55 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore()
   const requiresAuth = to.meta.requiresAuth !== false
   
-  if (requiresAuth && !authStore.isLoggedIn) {
-    next('/login')
+  // 如果访问登录页
+  if (to.path === '/login') {
+    // 如果已登录且token已验证，跳转到首页
+    if (authStore.isLoggedIn && authStore.tokenValidated) {
+      next('/')
+      return
+    }
+    // 如果有token但未验证，验证一下
+    if (authStore.isLoggedIn && !authStore.tokenValidated) {
+      try {
+        await authStore.fetchUserInfo()
+        next('/')
+      } catch {
+        // token无效，清除并停留在登录页
+        await authStore.logout()
+        next()
+      }
+      return
+    }
+    // 没有token，停留在登录页
+    next()
+    return
+  }
+  
+  // 需要认证的页面
+  if (requiresAuth) {
+    if (!authStore.isLoggedIn) {
+      // 没有token，跳转登录页
+      next('/login')
+    } else if (!authStore.tokenValidated) {
+      // 有token但未验证，验证token有效性
+      try {
+        await authStore.fetchUserInfo()
+        next()
+      } catch {
+        // token无效，清除并跳转登录页
+        await authStore.logout()
+        next('/login')
+      }
+    } else {
+      // token已验证，直接通过
+      next()
+    }
   } else {
+    // 不需要认证的页面
     next()
   }
 })

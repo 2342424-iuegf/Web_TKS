@@ -8,20 +8,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db, get_current_user
 from app.core.config import settings
-from app.schemas.token import Token
+from app.schemas.token import Token, RefreshToken, LoginResponse
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.models.user import User
 from app.services.auth import AuthService
 
 router = APIRouter()
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=LoginResponse)
 async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Annotated[AsyncSession, Depends(get_db)]
-) -> Token:
+) -> LoginResponse:
     """
     OAuth2 compatible token login
+    优化版本：一次请求返回token和用户信息
     """
     user = await AuthService.authenticate(
         form_data.username, 
@@ -48,7 +49,8 @@ async def login(
         minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES
     )
     
-    return Token(
+    # 返回token和用户信息（一次请求完成）
+    return LoginResponse(
         access_token=AuthService.create_access_token(
             user.id,
             expires_delta=access_token_expires
@@ -57,7 +59,16 @@ async def login(
             user.id,
             expires_delta=refresh_token_expires
         ),
-        token_type="bearer"
+        token_type="bearer",
+        expires_in=int(access_token_expires.total_seconds()),
+        user={
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "is_active": user.is_active,
+            "is_superuser": user.is_superuser,
+            "created_at": user.created_at.isoformat() if hasattr(user, 'created_at') and user.created_at else None
+        }
     )
 
 @router.post("/register", response_model=UserResponse)
@@ -72,7 +83,7 @@ async def register(
 
 @router.post("/refresh", response_model=Token)
 async def refresh_token(
-    refresh_token: str,
+    token_data: RefreshToken,
     db: Annotated[AsyncSession, Depends(get_db)]
 ) -> Token:
     """
@@ -81,7 +92,7 @@ async def refresh_token(
     try:
         # 验证刷新令牌
         payload = jwt.decode(
-            refresh_token, 
+            token_data.refresh_token, 
             settings.SECRET_KEY, 
             algorithms=["HS256"]
         )
@@ -112,7 +123,8 @@ async def refresh_token(
                 user.id,
                 expires_delta=refresh_token_expires
             ),
-            token_type="bearer"
+            token_type="bearer",
+            expires_in=int(access_token_expires.total_seconds())
         )
     except JWTError:
         raise HTTPException(

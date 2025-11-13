@@ -34,7 +34,7 @@ class AuthService:
         
         if not user:
             return None
-        if not verify_password(password, user.hashed_password):
+        if not verify_password(password, user.password_hash):
             return None
         return user
 
@@ -96,24 +96,35 @@ class AuthService:
         db: AsyncSession
     ) -> User:
         """创建用户"""
-        # 检查邮箱是否已存在
-        existing_user = await AuthService.get_user_by_email(
-            user_create.email, 
-            db
-        )
+        # 检查用户名是否已存在
+        query = select(User).where(User.username == user_create.username)
+        result = await db.execute(query)
+        existing_user = result.scalar_one_or_none()
         if existing_user:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered"
+                detail="Username already registered"
             )
+        
+        # 如果提供了邮箱，检查邮箱是否已存在
+        if user_create.email:
+            existing_user = await AuthService.get_user_by_email(
+                user_create.email, 
+                db
+            )
+            if existing_user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Email already registered"
+                )
         
         # 创建新用户
         db_user = User(
             email=user_create.email,
             username=user_create.username,
-            hashed_password=get_password_hash(user_create.password),
-            is_active=user_create.is_active,
-            is_superuser=user_create.is_superuser
+            password_hash=get_password_hash(user_create.password),
+            status=1 if user_create.is_active else 0,
+            role="admin" if user_create.is_superuser else "user"
         )
         db.add(db_user)
         await db.commit()
@@ -135,12 +146,16 @@ class AuthService:
         # 更新用户信息
         update_data = user_update.model_dump(exclude_unset=True)
         if "password" in update_data:
-            update_data["hashed_password"] = get_password_hash(
-                update_data.pop("password")
-            )
-            
-        for field, value in update_data.items():
-            setattr(user, field, value)
+            user.password_hash = get_password_hash(update_data.pop("password"))
+        
+        if "email" in update_data:
+            user.email = update_data.pop("email")
+        if "username" in update_data:
+            user.username = update_data.pop("username")
+        if "is_active" in update_data:
+            user.status = 1 if update_data.pop("is_active") else 0
+        if "is_superuser" in update_data:
+            user.role = "admin" if update_data.pop("is_superuser") else "user"
             
         await db.commit()
         await db.refresh(user)

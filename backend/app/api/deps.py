@@ -45,7 +45,8 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
     
-    user = await db.get(User, token_data.sub)
-    if user is None:
+    user_id = int(token_data.sub) if isinstance(token_data.sub, str) else token_data.sub
+    user = await db.get(User, user_id)
+    if user is None or not user.is_active:
         raise credentials_exception
     return user

@@ -39,26 +39,66 @@ class Token(BaseModel):
         }
     )
 
+class LoginResponse(BaseModel):
+    """
+    登录响应模型（包含token和用户信息）
+    这是更优的方案：一次请求返回所有需要的数据
+    """
+    access_token: str = Field(..., description="访问令牌")
+    refresh_token: str = Field(..., description="刷新令牌")
+    token_type: str = Field(default="bearer", description="令牌类型")
+    expires_in: int = Field(..., description="访问令牌过期时间(秒)")
+    user: Optional[dict] = Field(
+        None, 
+        description="用户信息",
+        example={
+            "id": 1,
+            "username": "admin",
+            "email": "admin@example.com",
+            "is_active": True,
+            "is_superuser": True
+        }
+    )
+    
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxx",
+                "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.yyy",
+                "token_type": "bearer",
+                "expires_in": 3600,
+                "user": {
+                    "id": 1,
+                    "username": "admin",
+                    "email": "admin@example.com",
+                    "is_active": True,
+                    "is_superuser": True
+                }
+            }
+        }
+    )
+
 class TokenPayload(BaseModel):
     """
     Token载荷模型
+    JWT中的exp和iat是Unix时间戳（整数），需要转换为datetime
     """
     sub: str | int = Field(
         ...,
         description="主题(通常是用户ID)",
         example="123"
     )
-    exp: datetime = Field(
+    exp: int | float = Field(
         ...,
-        description="过期时间",
-        example="2024-12-31T23:59:59"
+        description="过期时间(Unix时间戳)",
+        example=1735689599
     )
-    iat: Optional[datetime] = Field(
+    iat: Optional[int | float] = Field(
         default=None,
-        description="签发时间",
-        example="2024-01-01T00:00:00"
+        description="签发时间(Unix时间戳)",
+        example=1704067200
     )
-    type: str = Field(
+    type: Optional[str] = Field(
         default="access",
         description="令牌类型(access或refresh)",
         example="access"
@@ -69,9 +109,7 @@ class TokenPayload(BaseModel):
         example="unique-jwt-id-123"
     )
     
-    model_config = ConfigDict(json_encoders={
-        datetime: lambda v: v.timestamp()
-    })
+    model_config = ConfigDict(from_attributes=True)
 
 class RefreshToken(BaseModel):
     """

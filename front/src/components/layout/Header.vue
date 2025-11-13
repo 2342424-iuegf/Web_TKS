@@ -4,17 +4,28 @@
       <div class="logo">Web_TKS 系统</div>
     </div>
     <div class="header-right">
-      <el-dropdown trigger="click">
+      <ElDropdown trigger="click">
         <span class="user-info">
           <img :src="userAvatar" alt="用户头像" class="user-avatar">
           {{ userName }} <ElIcon class="el-icon--right"><ArrowDown /></ElIcon>
         </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click="handleProfile">个人中心</el-dropdown-item>
-          <el-dropdown-item @click="handleSettings">系统设置</el-dropdown-item>
-          <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+        <template #dropdown>
+          <ElDropdownMenu>
+            <ElDropdownItem @click="handleProfile">
+              <ElIcon><User /></ElIcon>
+              <span style="margin-left: 8px">个人中心</span>
+            </ElDropdownItem>
+            <ElDropdownItem @click="handleSettings">
+              <ElIcon><Setting /></ElIcon>
+              <span style="margin-left: 8px">系统设置</span>
+            </ElDropdownItem>
+            <ElDropdownItem divided @click="handleLogout">
+              <ElIcon><SwitchButton /></ElIcon>
+              <span style="margin-left: 8px">退出登录</span>
+            </ElDropdownItem>
+          </ElDropdownMenu>
+        </template>
+      </ElDropdown>
     </div>
   </header>
 </template>
@@ -22,8 +33,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ElIcon, ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessageBox, ElMessage } from 'element-plus'
+import { ArrowDown, User, Setting, SwitchButton } from '@element-plus/icons-vue'
 import { useAuthStore } from '@/store/modules/auth'
 
 const router = useRouter()
@@ -44,9 +55,26 @@ function handleSettings() {
 
 async function handleLogout() {
   try {
+    // 确认退出
+    await ElMessageBox.confirm(
+      '确定要退出登录吗？',
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    )
+    
+    // 执行退出
     await authStore.logout()
+    ElMessage.success('已退出登录')
     router.push('/login')
-  } catch (error) {
+  } catch (error: any) {
+    // 用户取消退出，不处理
+    if (error === 'cancel') {
+      return
+    }
     console.error('退出登录失败:', error)
   }
 }

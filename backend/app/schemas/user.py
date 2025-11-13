@@ -5,7 +5,7 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     """用户基础模型"""
-    email: EmailStr = Field(..., description="电子邮件")
+    email: Optional[EmailStr] = Field(None, description="电子邮件")
     username: str = Field(..., min_length=3, max_length=50, description="用户名")
     is_active: bool = Field(True, description="是否激活")
     is_superuser: bool = Field(False, description="是否是超级用户")

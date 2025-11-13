@@ -35,7 +35,7 @@
         </ElFormItem>
         
         <ElFormItem>
-          <div class="login-options d-flex justify-content-between align-items-center mb-4">
+          <div class="login-options d-flex justify-content-between align-items-center mb-2">
             <ElCheckbox v-model="loginForm.rememberMe" class="remember-me">记住我</ElCheckbox>
             <a href="#" class="forgot-password">忘记密码?</a>
           </div>
@@ -53,11 +53,7 @@
         </ElFormItem>
       </ElForm>
       
-      <div class="login-footer text-center mt-4">
-        <p class="text-muted">
-          测试账号: admin / admin123 或 user / user123
-        </p>
-      </div>
+
     </div>
   </div>
 </template>
@@ -217,8 +213,10 @@ html, body {
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
-  padding: 12px 0;
+  padding: 14px 0;
+  margin-top: 20px;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .login-button:hover {

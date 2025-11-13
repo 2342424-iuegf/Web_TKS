@@ -1,19 +1,25 @@
 # core/security.py
 from datetime import datetime, timedelta
 from typing import Any, Union
-from passlib.context import CryptContext
+import bcrypt
 from jose import jwt
 
-# 密码加密上下文
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """验证密码"""
-    return pwd_context.verify(plain_password, hashed_password)
+    """验证密码（使用bcrypt）"""
+    try:
+        password_bytes = plain_password.encode('utf-8')
+        hash_bytes = hashed_password.encode('utf-8')
+        return bcrypt.checkpw(password_bytes, hash_bytes)
+    except Exception:
+        return False
 
 def get_password_hash(password: str) -> str:
-    """获取密码哈希"""
-    return pwd_context.hash(password)
+    """获取密码哈希（使用bcrypt）"""
+    password_bytes = password.encode('utf-8')
+    # 生成盐并哈希密码（rounds=12是默认值，与passlib兼容）
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 def create_token(
     subject: Union[str, Any], 
