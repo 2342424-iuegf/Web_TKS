@@ -23,6 +23,7 @@ python-dateutil>=2.8.2
 pytz>=2024.1
 aiofiles>=23.2.1    # async file IO
 httpx>=0.26.0       # async HTTP client
+opencv-python>=4.8.0  # 图像处理（用于RTSP图像获取）
 
 # Logging and monitoring
 loguru>=0.7.0

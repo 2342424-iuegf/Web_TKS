@@ -58,6 +58,9 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: Optional[str] = None
     REDIS_DB: int = 0
     
+    # FFmpeg配置
+    FFMPEG_PATH: Optional[str] = None  # 如果为None，则自动查找；否则使用指定路径
+    
     class Config:
         case_sensitive = True
         env_file = ".env"

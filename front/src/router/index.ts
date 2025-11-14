@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
       { path: '/system/config', name: 'SystemConfig', component: () => import('@/views/system/SystemConfig.vue') },
       // 检测区域设置
       { path: '/detection/car-exchange', name: 'CarExchangeArea', component: () => import('@/views/detection/CarExchange.vue') },
-      { path: '/detection/off-duty', name: 'OffDutyArea', component: () => import('@/views/detection/WorkAbsence.vue') },
+      { path: '/detection/off-duty', name: 'OffDutyArea', component: () => import('@/views/detection/OffDutyAnnotation.vue') },
       { path: '/detection/danger', name: 'DangerArea', component: () => import('@/views/detection/DangerArea.vue') },
       // 模型管理
       { path: '/model', name: 'ModelManagement', component: () => import('@/views/model/ModelManagement.vue') },
