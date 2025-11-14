@@ -4,13 +4,22 @@
 
 ### 1. 传输项目到服务器
 
-**使用 MobaXterm 文件传输：**
+**方法A: 使用 Git 克隆（推荐，最简单）**
+
+在服务器上执行：
+```bash
+cd /home/web1/workspace
+git clone https://github.com/2342424-iuegf/Web_TKS.git Web_TKS
+cd Web_TKS
+```
+
+**方法B: 使用 MobaXterm 文件传输：**
 1. 在 MobaXterm 左侧文件浏览器中，进入 `/home/web1/workspace`
 2. 右键点击 `workspace` 目录
 3. 选择 "Upload files to current folder"
 4. 选择本地的 `Web_TKS` 项目目录（或压缩包）
 
-**或使用 SCP 命令（在本地 PowerShell）：**
+**方法C: 使用 SCP 命令（在本地 PowerShell）：**
 ```powershell
 scp -r F:\project\Web_TKS web1@39.184.196.175:/home/web1/workspace/
 ```

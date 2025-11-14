@@ -15,16 +15,76 @@
 
 ### 步骤1: 准备项目文件
 
-#### 方法1: 使用 Git（推荐）
-
-如果项目已提交到 Git 仓库：
+**首先检查服务器上的目录情况：**
 
 ```bash
-# 在服务器上克隆项目
+# 检查 workspace 目录是否存在 Web_TKS
 cd /home/web1/workspace
-git clone <你的Git仓库地址> Web_TKS
+ls -la
+```
+
+**根据情况选择方法：**
+- 如果目录为空或没有 `Web_TKS` 目录 → 使用 **方法1（Git克隆）**
+- 如果 `Web_TKS` 目录已存在 → 使用 **方法1.1（Git初始化并拉取）** 或先删除后克隆
+
+---
+
+#### 方法1: 使用 Git 克隆（推荐 - 适用于空目录）
+
+**适用场景**：`/home/web1/workspace` 目录为空或不存在 `Web_TKS` 目录
+
+```bash
+# 进入工作目录
+cd /home/web1/workspace
+
+# 克隆项目（使用你的真实GitHub地址）
+git clone https://github.com/2342424-iuegf/Web_TKS.git Web_TKS
+
+# 进入项目目录
 cd Web_TKS
 ```
+
+**优点**：
+- 一步完成，简单直接
+- 自动获取完整的Git历史记录
+- 后续更新方便（`git pull`）
+
+**注意事项**：如果 `Web_TKS` 目录已存在，需要先删除或重命名
+
+---
+
+#### 方法1.1: 使用 Git 初始化并拉取（适用于已有目录）
+
+**适用场景**：`/home/web1/workspace` 目录已存在，且你想在该目录下初始化Git
+
+```bash
+# 进入项目目录
+cd /home/web1/workspace
+
+# 如果目录不存在，先创建
+mkdir -p Web_TKS
+cd Web_TKS
+
+# 初始化 Git 仓库（若尚未初始化）
+git init
+
+# 绑定你的 GitHub 远程仓库
+git remote add origin https://github.com/2342424-iuegf/Web_TKS.git
+
+# 拉取仓库代码（假设主分支是 main）
+git pull origin main
+
+# 如果主分支是 master，使用：
+# git pull origin master
+```
+
+**优点**：
+- 适用于目录已存在的情况
+- 可以保留目录中的其他文件（如果有）
+
+**注意事项**：
+- 如果目录中已有文件，可能会有冲突
+- 需要确认远程仓库的主分支名称（main 或 master）
 
 #### 方法2: 使用 SCP 传输
 
